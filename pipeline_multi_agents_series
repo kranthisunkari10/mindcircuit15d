@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()  // Clean the workspace
+            }
+        }
+
+        stage('Clone Git Repository') {
+            agent { label 'agent_git' }  // Assign to agent_git
+            steps {
+                git branch: 'main', url: 'https://github.com/kranthisunkari10/mindcircuit15d.git'
+                stash name: 'gitRepo', includes: '**/*'
+            }
+        }
+
+        stage('Build Artifact') {
+            agent { label 'agent_mvn' }
+            steps {
+                unstash 'gitRepo'
+                script {
+                    echo 'Building the artifact on agent_mvn...'
+                    sh 'sudo mvn clean package'
+                    stash name: 'artifact', includes: '**/*'
+                }
+            }
+        }
+        stage('Deploy to Tomcat') {
+            steps {
+                unstash 'artifact'
+                script {
+                    echo 'Deploying artifact to Tomcat server...'
+                    deploy adapters: [tomcat9(credentialsId: 'tomcat_id', path: '', url: 'http://ec2-34-235-165-157.compute-1.amazonaws.com:8081')], contextPath: 'kranthi_series', war: '**/*.war'
+                }
+            }
+        }
+    }
+}
