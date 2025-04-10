@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: facebook-deploy
+  labels:
+    app: facebook
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: facebook
+  template:
+    metadata:
+      labels:
+        app: facebook
+    spec:
+      containers:
+        - name: facebook-cont
+          image: kranthisunkari/facebook:10
+          ports:
+            - containerPort: 80
