@@ -6,6 +6,6 @@ RUN mvn clean install
 
 FROM tomcat
 WORKDIR webapps
-COPY --from=buildStage /opt/kranthi/*.war .
+COPY --from=buildStage /opt/kranthi/target/*.war .
 RUN rm -rf ROOT && mv *.war ROOT.war
 EXPOSE 8080
