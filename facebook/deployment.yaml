@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
         - name: facebook-cont
-          image: kranthisunkari/facebook:5
+          image: kranthisunkari/facebook:1
           ports:
             - containerPort: 80
