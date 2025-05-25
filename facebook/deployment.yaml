@@ -33,5 +33,4 @@ spec:
   - port: 80
     targetPort: 80
   selector:
-    labels:
-      app: facebook
+    app: facebook
